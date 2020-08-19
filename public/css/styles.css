@@ -378,15 +378,12 @@ header {
         FOOTER
 ==========================*/
 footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   text-align: center;
   padding: 1em;
   margin-top: 1em;
   font-weight: 400;
   font-size: 0.875rem;
-  background-color: rgb(27, 27, 27);
   border-top: 1px solid rgba(0, 0, 0, 0.14);
 }
 
@@ -503,15 +500,13 @@ input[type="checkbox"]:checked + .checkbox-label:after {
   z-index: 2;
   margin-top:0.25em;
   padding: 0.25em 0;
-  display: none;
+  display: block;
   border-radius: 5px;
   width: 100%;
   background-color: #fff;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);;
 }
-.dropdown-menu-visible{
-  display: block;
-}
+
 .dropdown-item{
   text-align: left;
   margin:0;
