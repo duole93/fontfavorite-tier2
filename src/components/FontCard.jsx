@@ -23,9 +23,9 @@ function FontCard(props) {
             fontFamily: props.fontTitle
         }
         return (
-            <a className="font-card" href="none">
+            <a className="font-card" href="none" ref={props.useRef}>
                 <h3 className="font-title">{props.fontTitle}</h3>
-                <p className="font-test open-sans" style={fontStyle}>{props.customText === "" ? defaultText : props.customText}</p>
+                <p className="font-test" style={fontStyle}>{props.customText === "" ? defaultText : props.customText}</p>
             </a>
         );
     }
@@ -33,7 +33,7 @@ function FontCard(props) {
         return (
             <a className="font-card" href="none">
                 <h3 className="font-title">{props.fontTitle}</h3>
-                <p className="font-test open-sans">{props.customText === "" ? defaultText : props.customText}</p>
+                <p className="font-test">{props.customText === "" ? defaultText : props.customText}</p>
             </a>
         );
     }

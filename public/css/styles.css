@@ -336,10 +336,11 @@ header {
   border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 5px;
   padding: 1em;
-  position: relative;
+  position: relative;  
 }
 .font-card:hover {
-  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.14);
+  top:-2px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.24);
 }
 
 .font-title,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import FontCard from './FontCard'
 
 
@@ -8,14 +8,26 @@ function FontContainer(props) {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
+    const [foundResults, setFoundResults] = useState(0);
+    const [lastCard, setLastCard] = useState(0)
+    const loadCards = 12;
+    const observer = useRef();
 
-    //calling an API using useEffect
     useEffect(() => {
         fetch("https://webfonts.googleapis.com/v1/webfonts?sort=POPULARITY&key=" + process.env.REACT_APP_API_KEY)
             .then(res => res.json())
             .then(
                 (result) => {
-                    setItems(result.items.slice(0,10));
+                    //setItems(result.items.slice(0,10));
+                    setItems(
+                        // () =>
+                        // result.items.map(item => ({
+                        //     family: item.family, files: item.files
+                        // }))
+                        result.items
+                    );
+                    setFoundResults(items.length);
+                    setLastCard(loadCards);
                     setIsLoaded(true);
                 },
                 (error) => {
@@ -25,6 +37,22 @@ function FontContainer(props) {
             )
     }, [])
 
+    const lastFontCardRef = useCallback(node => {
+        if (!isLoaded) return;
+        if (observer.current)
+            observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                setLastCard(prev => prev + 10)
+                console.log("visible");
+            }
+        })
+        if (node) observer.current.observe(node)
+        console.log(node);
+    }, [isLoaded]);
+    //calling an API using useEffect
+
+
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -32,16 +60,29 @@ function FontContainer(props) {
     } else if (isLoaded) {
         return (
             <div className="container-grid">
-                {items.map((item, index) => (
-                    <FontCard
-                        key={index}
-                        fontSize={props.fontSize}
-                        fontFamily={item.files.regular}
-                        customText={props.customText}
-                        fontTitle={item.family}
-                    />
-                ))}
-                
+                {items.map((item, index) => {
+                    if (index < lastCard)
+                        if (index === lastCard - 1)
+                            return (<FontCard
+                                useRef={lastFontCardRef}
+                                key={index}
+                                fontSize={props.fontSize}
+                                fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
+                                customText={props.customText}
+                                fontTitle={index}
+                            />)
+                        else
+                            return (<FontCard
+                                key={index}
+                                fontSize={props.fontSize}
+                                fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
+                                customText={props.customText}
+                                fontTitle={item.family}
+                            />)
+                    else
+                        return "";
+                }
+                )}
             </div>
         );
     }
