@@ -8,7 +8,7 @@ function FontContainer(props) {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
-    const [foundResults, setFoundResults] = useState(0);
+    const [foundResults, setFoundResults] = useState([]);
     const [lastCard, setLastCard] = useState(0)
     const loadCards = 12;
     const observer = useRef();
@@ -26,7 +26,6 @@ function FontContainer(props) {
                         // }))
                         result.items
                     );
-                    setFoundResults(items.length);
                     setLastCard(loadCards);
                     setIsLoaded(true);
                 },
@@ -36,7 +35,6 @@ function FontContainer(props) {
                 }
             )
     }, [])
-
     const lastFontCardRef = useCallback(node => {
         if (!isLoaded) return;
         if (observer.current)
@@ -52,39 +50,48 @@ function FontContainer(props) {
     }, [isLoaded]);
     //calling an API using useEffect
 
+    function viewClass() {
+        if (props.listView)
+            return "container-grid grid-1"
+        else
+            return "container-grid";
+    }
+
+   
 
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
         return <div>Loading...</div>;
     } else if (isLoaded) {
-        return (
-            <div className="container-grid">
-                {items.map((item, index) => {
-                    if (index < lastCard)
-                        if (index === lastCard - 1)
-                            return (<FontCard
-                                useRef={lastFontCardRef}
-                                key={index}
-                                fontSize={props.fontSize}
-                                fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
-                                customText={props.customText}
-                                fontTitle={index}
-                            />)
+        const classes = viewClass();          
+            return (
+                <div className={classes}>
+                    {items.filter(item => item.family.toLowerCase().indexOf(props.searchText.toLowerCase(), 0) !== -1).map((item, index) => {
+                        if (index < lastCard)
+                            if (index === lastCard - 1)
+                                return (<FontCard
+                                    useRef={lastFontCardRef}
+                                    key={index}
+                                    fontSize={props.fontSize}
+                                    fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
+                                    customText={props.customText}
+                                    fontTitle={index}
+                                />)
+                            else
+                                return (<FontCard
+                                    key={index}
+                                    fontSize={props.fontSize}
+                                    fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
+                                    customText={props.customText}
+                                    fontTitle={item.family}
+                                />)
                         else
-                            return (<FontCard
-                                key={index}
-                                fontSize={props.fontSize}
-                                fontFamily={item.files.regular ? item.files.regular : item.files[Object.keys(item.files)[0]]}
-                                customText={props.customText}
-                                fontTitle={item.family}
-                            />)
-                    else
-                        return "";
-                }
-                )}
-            </div>
-        );
+                            return "";
+                    }
+                    )}
+                </div>
+            );    
     }
 }
 export default FontContainer;

@@ -38,6 +38,7 @@ a {
   color: rgba(0, 0, 0, 0.6);
 }
 body {
+  overflow-y:scroll;
   margin: 0;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
@@ -94,7 +95,7 @@ button:hover {
 
 .font-test {
   font-size: 24px;
-  line-height: 1em;
+  line-height: 1.25em;
   overflow-wrap: anywhere;
   margin-top: 1rem;
 }
@@ -279,7 +280,7 @@ header {
         VIEW
 ==========================*/
 .view-ctn {
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 2em;
 }
 .view-options-ctn {
@@ -291,20 +292,7 @@ header {
   flex-shrink: 0;
 }
 
-.view-options-title {
-  padding: 0 0.5em;
-  margin: 0 0.5em;
-  position: relative;
-}
-.view-divider {
-  border-right: 1px solid rgba(0, 0, 0, 0.14);
-  position: absolute;
-  margin: auto 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  height: 70%;
-}
+
 .view-ctn p {
   display: inline-block;
   margin: 0 0.5em 0 0;
@@ -313,10 +301,16 @@ header {
 .view-btn {
   padding: 0.5em;
   border: none;
-  border-radius: 3px;
+  border-radius: 3px;  
+}
+.view-switcher{
+  color: rgba(0, 0, 0, 0.14);
+}
+.view-active{
+  color: #3c4043;
 }
 
-.view-btn-last {
+.view-btn-sort {
   margin-right: 0;
 }
 
@@ -329,6 +323,11 @@ header {
   grid-auto-rows: minmax(35vh, auto);
   grid-gap: 10px;
   max-width: 960px;
+}
+
+.grid-1{
+  grid-template-columns: auto;
+  grid-auto-rows: auto;
 }
 
 .font-card {
@@ -379,6 +378,10 @@ header {
         FOOTER
 ==========================*/
 footer {
+  position:fixed;
+  bottom:0px;
+  z-index:2;
+  background-color:#fff;
   width: 100%;
   text-align: center;
   padding: 1em;
